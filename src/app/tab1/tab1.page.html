@@ -16,7 +16,7 @@
     <ion-accordion *ngFor="let movie of movies" [value]="movie.id">
       <ion-item slot="header" lines="full">
         <ion-thumbnail slot="start" class="movie-poster">
-          <img [src]="imageBaseUrl + movie.poster_path" />
+          <img *ngIf="movie.poster_path" [src]="imageBaseUrl + movie.poster_path" />
         </ion-thumbnail>
 
         <ion-label>
