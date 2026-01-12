@@ -20,7 +20,7 @@ export class Tab1Page {
   search() {
     if (this.searchQuery.length > 2) {
       this.movieService.search(this.searchQuery).subscribe((result) => {
-        this.movieService = result.results;
+        this.movies = result.results;
       });
     }
   }
