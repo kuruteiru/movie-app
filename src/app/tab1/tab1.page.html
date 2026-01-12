@@ -13,32 +13,36 @@
   </ion-toolbar>
 
   <ion-accordion-group>
-    <ion-accordion *ngFor="let movie of movies" [value]="movie.id">
-      <ion-item slot="header" lines="full">
-        <ion-thumbnail slot="start" class="movie-poster">
-          <img *ngIf="movie.poster_path" [src]="imageBaseUrl + movie.poster_path" />
-        </ion-thumbnail>
+    @for (movie of movies; track movie.id) {
+      <ion-accordion [value]="movie.id">
+        <ion-item slot="header" lines="full">
+          <ion-thumbnail slot="start" class="movie-poster">
+            @if (movie.poster_path) {
+              <img [src]="imageBaseUrl + movie.poster_path" />
+            }
+          </ion-thumbnail>
 
-        <ion-label>
-          <h2 class="movie-title">{{ movie.title }}</h2>
-          <p>Rating: ⭐ {{ movie.vote_average }}</p>
-          <ion-note color="primary">Click for details</ion-note>
-        </ion-label>
+          <ion-label>
+            <h2 class="movie-title">{{ movie.title }}</h2>
+            <p>Rating: ⭐ {{ movie.vote_average }}</p>
+            <ion-note color="primary">Click for details</ion-note>
+          </ion-label>
 
-        <ion-button slot="end" fill="clear" (click)="toggleFavorite(movie); $event.stopPropagation()">
-          <ion-icon
-            [name]="isFavorite(movie) ? 'heart' : 'heart-outline'"
-            [color]="isFavorite(movie) ? 'danger' : 'medium'"
-            size="large">
-          </ion-icon>
-        </ion-button>
-      </ion-item>
+          <ion-button slot="end" fill="clear" (click)="toggleFavorite(movie); $event.stopPropagation()">
+            <ion-icon
+              [name]="isFavorite(movie) ? 'heart' : 'heart-outline'"
+              [color]="isFavorite(movie) ? 'danger' : 'medium'"
+              size="large">
+            </ion-icon>
+          </ion-button>
+        </ion-item>
 
-      <div class="ion-padding" slot="content">
-        <p><strong>Overview:</strong></p>
-        <p class="overview-text">{{ movie.overview }}</p>
-      </div>
-    </ion-accordion>
+        <div class="ion-padding" slot="content">
+          <p><strong>Overview:</strong></p>
+          <p class="overview-text">{{ movie.overview }}</p>
+        </div>
+      </ion-accordion>
+    }
   </ion-accordion-group>
 
   <ion-infinite-scroll (ionInfinite)="loadMore($event)">

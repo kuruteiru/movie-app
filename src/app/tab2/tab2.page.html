@@ -5,33 +5,37 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div *ngIf="favoriteMovies.length === 0" class="empty-state">
-    <ion-icon name="heart-outline"></ion-icon>
-    <p>No favorites yet.</p>
-  </div>
-
   <ion-accordion-group>
-    <ion-accordion *ngFor="let movie of favoriteMovies" [value]="movie.id">
-      <ion-item slot="header" lines="full">
-        <ion-thumbnail slot="start" class="movie-poster">
-          <img *ngIf="movie.poster_path" [src]="imageBaseUrl + movie.poster_path" />
-        </ion-thumbnail>
+    @for (movie of favoriteMovies; track movie.id) {
+      <ion-accordion [value]="movie.id">
+        <ion-item slot="header" lines="full">
+          <ion-thumbnail slot="start" class="movie-poster">
+            @if (movie.poster_path) {
+              <img [src]="imageBaseUrl + movie.poster_path" />
+            }
+          </ion-thumbnail>
 
-        <ion-label>
-          <h2 class="movie-title">{{ movie.title }}</h2>
-          <p>Rating: ⭐ {{ movie.vote_average }}</p>
-          <ion-note color="primary">Click for details</ion-note>
-        </ion-label>
+          <ion-label>
+            <h2 class="movie-title">{{ movie.title }}</h2>
+            <p>Rating: ⭐ {{ movie.vote_average }}</p>
+            <ion-note color="primary">Click for details</ion-note>
+          </ion-label>
 
-        <ion-button slot="end" fill="clear" (click)="removeFavorite(movie); $event.stopPropagation()">
-          <ion-icon name="heart" color="danger" size="large"></ion-icon>
-        </ion-button>
-      </ion-item>
+          <ion-button slot="end" fill="clear" (click)="removeFavorite(movie); $event.stopPropagation()">
+            <ion-icon name="heart" color="danger" size="large"></ion-icon>
+          </ion-button>
+        </ion-item>
 
-      <div class="ion-padding" slot="content">
-        <p><strong>Overview:</strong></p>
-        <p class="overview-text">{{ movie.overview }}</p>
+        <div class="ion-padding" slot="content">
+          <p><strong>Overview:</strong></p>
+          <p class="overview-text">{{ movie.overview }}</p>
+        </div>
+      </ion-accordion>
+    } @empty {
+      <div class="empty-state">
+        <ion-icon name="heart-outline"></ion-icon>
+        <p>No favorites yet.</p>
       </div>
-    </ion-accordion>
+    }
   </ion-accordion-group>
 </ion-content>
