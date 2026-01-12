@@ -1,0 +1,20 @@
+.search-toolbar {
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.movie-poster {
+  width: 80px;
+  height: 120px;
+}
+
+.movie-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  white-space: normal;
+}
+
+.overview-text {
+  line-height: 1.5;
+  color: var(--ion-color-dark);
+}

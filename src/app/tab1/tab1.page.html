@@ -1,31 +1,50 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Search</ion-title>
+    <ion-title>Movie Search</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-searchbar
-    [(ngModel)]="searchQuery"
-    (ionInput)="search()"
-  ></ion-searchbar>
+<ion-content>
+  <ion-toolbar class="search-toolbar">
+    <ion-searchbar [(ngModel)]="searchQuery" (keyup.enter)="search()" placeholder="Search movies..."></ion-searchbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="search()" fill="solid" color="primary">Search</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 
-  <ion-card *ngFor="let movie of movies">
-    <img *ngIf="movie.poster_path" [src]="imageBaseUrl + movie.poster_path" />
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let movie of movies" [value]="movie.id">
+      <ion-item slot="header" lines="full">
+        <ion-thumbnail slot="start" class="movie-poster">
+          <img [src]="imageBaseUrl + movie.poster_path" />
+        </ion-thumbnail>
 
-    <ion-card-header>
-      <ion-card-title>{{ movie.title }}</ion-card-title>
-      <ion-card-subtitle>Rating: {{ movie.vote_average }}</ion-card-subtitle>
-    </ion-card-header>
+        <ion-label>
+          <h2 class="movie-title">{{ movie.title }}</h2>
+          <p>Rating: ⭐ {{ movie.vote_average }}</p>
+          <ion-note color="primary">Click for details</ion-note>
+        </ion-label>
 
-    <ion-card-content> {{ movie.overview | slice:0:100 }}... </ion-card-content>
+        <ion-button slot="end" fill="clear" (click)="toggleFavorite(movie); $event.stopPropagation()">
+          <ion-icon
+            [name]="isFavorite(movie) ? 'heart' : 'heart-outline'"
+            [color]="isFavorite(movie) ? 'danger' : 'medium'"
+            size="large">
+          </ion-icon>
+        </ion-button>
+      </ion-item>
 
-    <ion-footer>
-      <ion-button fill="clear" (click)="addToFavorites(movie)">
-        <ion-icon name="heart" slot="start"></ion-icon>
-        Favorite
-      </ion-button>
-      <ion-button fill="clear">Details</ion-button>
-    </ion-footer>
-  </ion-card>
+      <div class="ion-padding" slot="content">
+        <p><strong>Overview:</strong></p>
+        <p class="overview-text">{{ movie.overview }}</p>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more movies...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

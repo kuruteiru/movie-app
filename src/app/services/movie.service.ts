@@ -34,8 +34,8 @@ export class MovieService {
     });
   }
 
-  search(query: string): Observable<any> {
-    const url = `${this.baseUrl}/search/movie?query=${encodeURIComponent(query)}`;
+  search(query: string, page: number = 1): Observable<any> {
+    const url = `${this.baseUrl}/search/movie?query=${encodeURIComponent(query)}&page=${page}`;
     return this.http.get(url, { headers: this.getHeaders() });
   }
 
