@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Storage } from '@ionic/storage-angular';
 
@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage-angular';
   providedIn: 'root',
 })
 export class MovieService {
-  private apiKey: string = "key";
+  private accessToken: string = "";
   private baseUrl: string = "https://api.themoviedb.org/3";
   private storage: Storage | null = null;
   private FAVORITES_KEY = "favorites";
@@ -27,8 +27,16 @@ export class MovieService {
     return this.storage;
   }
 
+  private getHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.accessToken}`
+    });
+  }
+
   search(query: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/search/movie?api_key=${this.apiKey}&query=${query}`);
+    const url = `${this.baseUrl}/search/movie?query=${encodeURIComponent(query)}`;
+    return this.http.get(url, { headers: this.getHeaders() });
   }
 
   async addToFavorites(movie: Movie): Promise<Movie[]> {
